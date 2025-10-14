@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { Modal } from "react-bootstrap";
+import { auth } from "../firebase";
 
 export default function AuthPage() {
 
@@ -14,7 +15,7 @@ export default function AuthPage() {
     const handleShowSignUp = () => setModalShow("SignUp")
     const handleShowLogin = () => setModalShow("Login")
     const navigate = useNavigate()
-    const auth = getAuth()
+    // const auth = getAuth();
 
     const handleSignUp = async (e) => {
         e.preventDefault()

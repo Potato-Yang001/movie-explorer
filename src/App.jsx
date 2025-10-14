@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AuthPage from "./pages/AuthPage";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <div className="text-[50px] font-bold text-center text-blue-500">
-      Hello World
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element={<AuthPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App
