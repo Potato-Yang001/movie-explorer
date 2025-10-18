@@ -73,22 +73,42 @@ export function MovieSearch() {
 
 
                 {/* Results Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {results.map((results) => (
-                        <div key={results.id} className="p-2 border rounded">
-                            <h3 className="font-semibold">{results.title}</h3>
-                            {results.poster_path ? (
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w200${results.poster_path}`}
-                                    alt={results.title}
-                                    className="mt-2 rounded"
-                                />
-                            ) : (
-                                <p className="mt-2 text-gray-500">No image</p>
-                            )}
-                        </div>
-                    ))}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+                    {results.length === 0 ? (
+                        <p className="text-center col-span-full text-gray-500">
+                            No movies found. Try searching something!
+                        </p>
+                    ) : (
+                        results.map((movie) => (
+                            <div
+                                key={movie.id}
+                                className="bg-white shadow-lg rounded-lg overflow-hidden border"
+                            >
+                                {movie.poster_path ? (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-full h-64 object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-64 bg-gray-300 flex items-center justify-center">
+                                        <span className="text-gray-600">No Image</span>
+                                    </div>
+                                )}
+
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
+                                    <button
+                                        className="mt-3 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
+
             </form>
         </div>
     );
