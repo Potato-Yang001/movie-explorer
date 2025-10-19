@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { Modal } from "react-bootstrap";
 import { auth } from "../firebase";
@@ -15,6 +15,8 @@ export default function AuthPage() {
     const handleShowSignUp = () => setModalShow("SignUp")
     const handleShowLogin = () => setModalShow("Login")
     const navigate = useNavigate()
+    const location = useLocation()
+
     // const auth = getAuth();
 
     const handleSignUp = async (e) => {
@@ -42,6 +44,14 @@ export default function AuthPage() {
         }
     }
 
+    useEffect(() => {
+        if (location.search.includes("signup")) {
+            setModalShow("SignUp");
+        } else {
+            setModalShow("Login");
+        }
+    }, [location]);
+
     const provider = new GoogleAuthProvider()
 
     const handleGoogleSignIn = async () => {
@@ -58,12 +68,12 @@ export default function AuthPage() {
 
     return (
         <>
-            <button
+            {/* <button
                 className="bg-blue-600 text-white px-5 py-2 rounded-lg"
                 onClick={handleShowLogin}
             >
                 Login
-            </button>
+            </button>  */}
 
             <Modal show={modalShow === "Login"} onHide={handleClose} centered>
                 <div className="p-6">
