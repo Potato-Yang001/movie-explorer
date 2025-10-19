@@ -77,7 +77,7 @@ export default function AuthPage() {
 
             <Modal show={modalShow === "Login"} onHide={handleClose} centered>
                 <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Login</h3>
+                    <h3 className="text-xl font-bold mb-4">Sign In</h3>
 
                     {error && <p className="text-red-500 mb-2">{error}</p>}
 
@@ -135,7 +135,7 @@ export default function AuthPage() {
 
             <Modal show={modalShow === "SignUp"} onHide={handleClose} centered>
                 <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Sign in</h3>
+                    <h3 className="text-xl font-bold mb-4">Sign Up</h3>
 
                     {error && <p className="text-red-500 mb-2">{error}</p>}
 

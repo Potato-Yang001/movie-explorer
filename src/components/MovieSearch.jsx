@@ -15,7 +15,7 @@ export function MovieSearch() {
         }
 
         const data = await searchMoviesTMDB(query); // call the searchMoviesTMDB function with the query
-        setResults(data?.results || []); // set the results state with the search results
+        setResults(data || []); // set the results state with the search results
     }
 
     return (
