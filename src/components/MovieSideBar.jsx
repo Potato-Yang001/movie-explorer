@@ -17,17 +17,17 @@ export default function MovieSideBar({ handleLogout }) {
         <div className="flex">
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 h-full w-64 bg-blue-700 text-white shadow-lg transform transition-transform duration-300 ease-in-out
+                className={`fixed top-0 left-0 h-full w-64 bg-lime-100 text-black shadow-lg transform transition-transform duration-300 ease-in-out
   ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
             >
-                <div className="p-4 text-2xl font-bold border-b border-blue-500">
+                <div className="p-4 text-2xl font-bold border-b border-lime-800">
                     BingeBuddy
                 </div>
 
                 <ul className="p-4 space-y-4 text-lg">
                     <Link
                         to="/"
-                        className="flex items-center text-white hover:text-yellow-300 transition-colors"
+                        className="flex items-center text-black hover:text-yellow-300 transition-colors"
                         style={{ textDecoration: "none" }}
                     >
                         <i className="bi bi-house-door me-2"></i> Home
@@ -35,7 +35,7 @@ export default function MovieSideBar({ handleLogout }) {
 
                     <Link
                         to="/search"
-                        className="flex items-center text-white hover:text-yellow-300 transition-colors"
+                        className="flex items-center text-black hover:text-yellow-300 transition-colors"
                         style={{ textDecoration: "none" }}
                     >
                         <i className="bi bi-search me-2"></i> Search
@@ -43,7 +43,7 @@ export default function MovieSideBar({ handleLogout }) {
                     <li>
                         <Link
                             to="/favourite"
-                            className="flex items-center text-white no-underline hover:text-yellow-300 transition-colors"
+                            className="flex items-center text-black no-underline hover:text-yellow-300 transition-colors"
                             style={{ textDecoration: "none" }}
                         >
                             <i className="bi bi-heart me-2"></i> Favourite
@@ -53,7 +53,7 @@ export default function MovieSideBar({ handleLogout }) {
                     <li>
                         <button
                             onClick={handleSignup}
-                            className="flex items-center gap-2 text-white no-underline hover:text-yellow-300 transition-colors"
+                            className="flex items-center gap-2 text-black no-underline hover:text-yellow-300 transition-colors"
                         >
                             <i className="bi bi-box-arrow-in-right me-2"></i>Sign In
                         </button>
@@ -62,7 +62,7 @@ export default function MovieSideBar({ handleLogout }) {
                     <li>
                         <button
                             onClick={() => navigate('/auth?mode=signup')}
-                            className="flex items-center gap-2 text-white no-underline hover:text-yellow-300 transition-colors"
+                            className="flex items-center gap-2 text-black no-underline hover:text-yellow-300 transition-colors"
                         >
                             <i className="bi bi-person-plus me-2"></i>Sign Up
                         </button>
@@ -70,7 +70,7 @@ export default function MovieSideBar({ handleLogout }) {
 
                     <li>
                         <button
-                            className="flex items-center text-white no-underline hover:text-yellow-300 transition-colors"
+                            className="flex items-center text-black no-underline hover:text-yellow-300 transition-colors"
                             onClick={handleLogout}
                         >
                             <i className="bi bi-box-arrow-right me-2"></i>Sign Out
