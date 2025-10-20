@@ -36,7 +36,7 @@ export default function DetailPage() {
                     setOmdbDetails(omdbData)
                 }
 
-                const tralier = await getMovieTrailerYouTube(tmdnRes.movies.title)
+                const tralier = await getMovieTrailerYouTube(tmdnRes.data.title)
                 setTrailerUrl(tralier)
                 setLoading(false)
             } catch (error) {
@@ -106,99 +106,168 @@ export default function DetailPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 py-10">
-            <div className="flex flex-col md:flex-row gap-8">
-                {/* Poster */}
-                <img
-                    src={
-                        movies.poster_path
-                            ? `https://image.tmdb.org/t/p/w500${movies.poster_path}`
-                            : "https://via.placeholder.com/400x600?text=No+Image"
-                    }
-                    alt={movies.title}
-                    className="rounded-lg shadow-md w-full md:w-80 object-cover"
-                />
+        <div className="min-vh-100 bg-dark text-white position-relative overflow-hidden">
+            {/* Backdrop Background */}
+            <div
+                className="position-absolute top-0 start-0 w-100 h-100"
+                style={{
+                    backgroundImage: movies.backdrop_path
+                        ? `url(https://image.tmdb.org/t/p/original${movies.backdrop_path})`
+                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    filter: 'blur(20px)',
+                    opacity: 0.25,
+                    zIndex: 0
+                }}
+            ></div>
 
-                {/* Movie Info */}
-                <div className="flex-1 text-center md:text-left">
-                    <h1 className="text-4xl font-bold mb-3">{movies.title}</h1>
-                    <p className="text-gray-500 italic mb-4">
-                        {movies.tagline || "No tagline available"}
-                    </p>
+            <div className="container position-relative py-5" style={{ zIndex: 1 }}>
+                <div className="row g-4 align-items-start">
+                    {/* Movie Poster */}
+                    <div className="col-lg-4 col-md-5">
+                        <div className="card bg-transparent border-0 shadow-lg">
+                            <img
+                                src={
+                                    movies.poster_path
+                                        ? `https://image.tmdb.org/t/p/w500${movies.poster_path}`
+                                        : "https://via.placeholder.com/400x600?text=No+Image"
+                                }
+                                alt={movies.title}
+                                className="card-img-top rounded-3"
+                                style={{ height: 'auto', objectFit: 'cover' }}
+                            />
+                        </div>
+                    </div>
 
-                    <p className="text-gray-700 mb-4">{movies.overview}</p>
+                    {/* Movie Information */}
+                    <div className="col-lg-8 col-md-7">
+                        <div className="mb-4">
+                            <h1 className="display-4 fw-bold mb-2">{movies.title}</h1>
+                            {movies.tagline && (
+                                <p className="lead text-warning fst-italic mb-3">
+                                    "{movies.tagline}"
+                                </p>
+                            )}
 
-                    <ul className="text-gray-600 mb-6">
-                        <li>
-                            <strong>Release Date:</strong> {movies.release_date || "N/A"}
-                        </li>
-                        <li>
-                            <strong>Rating:</strong> ⭐ {movies.vote_average?.toFixed(1)} / 10
-                        </li>
-                        <li>
-                            <strong>Runtime:</strong> {movies.runtime} minutes
-                        </li>
+                            {/* Rating Badge */}
+                            <div className="d-flex flex-wrap gap-2 mb-3">
+                                <span className="badge bg-danger fs-6 px-3 py-2">
+                                    <span className="me-1">⭐</span>
+                                    {movies.vote_average?.toFixed(1)} / 10
+                                </span>
+                                <span className="badge bg-info fs-6 px-3 py-2">
+                                    <span className="me-1">⏱️</span>
+                                    {movies.runtime} min
+                                </span>
+                                <span className="badge bg-success fs-6 px-3 py-2">
+                                    <span className="me-1">📅</span>
+                                    {movies.release_date || "N/A"}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Overview */}
+                        <div className="card mb-4" style={{ backgroundColor: 'rgba(0,0,0,0.75)', border: '1px solid #6c757d' }}>
+                            <div className="card-body">
+                                <h5 className="card-title text-danger mb-3">
+                                    <span className="me-2">📄</span>
+                                    Synopsis
+                                </h5>
+                                <p className="card-text fs-6 lh-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                                    {movies.overview || "No overview available."}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Additional Details */}
                         {omdbDetails && (
-                            <>
-                                <li>
-                                    <strong>Director:</strong> {omdbDetails.Director}
-                                </li>
-                                <li>
-                                    <strong>Actors:</strong> {omdbDetails.Actors}
-                                </li>
-                                <li>
-                                    <strong>Genre:</strong> {omdbDetails.Genre}
-                                </li>
-                            </>
+                            <div className="card mb-4" style={{ backgroundColor: 'rgba(0,0,0,0.75)', border: '1px solid #6c757d' }}>
+                                <div className="card-body">
+                                    <h5 className="card-title text-danger mb-3">
+                                        <span className="me-2">ℹ️</span>
+                                        Movie Details
+                                    </h5>
+                                    <div className="row g-3">
+                                        <div className="col-md-6">
+                                            <p className="mb-2">
+                                                <strong className="text-warning">Director:</strong>
+                                                <span className="ms-2" style={{ color: 'rgba(255,255,255,0.7)' }}>{omdbDetails.Director}</span>
+                                            </p>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <p className="mb-2">
+                                                <strong className="text-warning">Genre:</strong>
+                                                <span className="ms-2" style={{ color: 'rgba(255,255,255,0.7)' }}>{omdbDetails.Genre}</span>
+                                            </p>
+                                        </div>
+                                        <div className="col-12">
+                                            <p className="mb-0">
+                                                <strong className="text-warning">Actors:</strong>
+                                                <span className="ms-2" style={{ color: 'rgba(255,255,255,0.7)' }}>{omdbDetails.Actors}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         )}
-                    </ul>
 
-                    {/* Buttons */}
-                    <div className="flex gap-3 justify-center md:justify-start">
-                        {trailerUrl && (
+                        {/* Action Buttons */}
+                        <div className="d-flex flex-wrap gap-3">
+                            {trailerUrl && (
+                                <button
+                                    className="btn btn-danger btn-lg px-4 py-3 d-flex align-items-center shadow-lg"
+                                    onClick={handleShowTrailer}
+                                >
+                                    <span className="fs-4 me-2">▶️</span>
+                                    <span className="fw-semibold">Watch Trailer</span>
+                                </button>
+                            )}
                             <button
-                                className="btn btn-danger flex items-center"
-                                onClick={handleShowTrailer}
+                                className="btn btn-outline-light btn-lg px-4 py-3 d-flex align-items-center shadow-lg"
+                                onClick={handleAddFavorite}
                             >
-                                <i className="bi bi-play-circle me-1"></i> Watch Trailer
+                                <span className="fs-4 me-2">❤️</span>
+                                <span className="fw-semibold">Add to Favorites</span>
                             </button>
-                        )}
-                        <button
-                            className="btn btn-success flex items-center"
-                            onClick={() => handleAddFavorite(movies)}
-                        >
-                            <i className="bi bi-heart-fill me-1"></i> Add to Favorites
-                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* 🎥 Trailer Modal */}
-            <Modal
-                show={showModal}
-                onHide={handleCloseTrailer}
-                size="lg"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>{movies.title} - Official Trailer</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="p-0">
-                    {trailerUrl ? (
-                        <iframe
-                            width="100%"
-                            height="400"
-                            src={trailerUrl.replace("watch?v=", "embed/")}
-                            title="YouTube trailer"
-                            allowFullScreen
-                        ></iframe>
-                    ) : (
-                        <p className="text-center text-gray-600 py-4">
-                            No trailer available 😢
-                        </p>
-                    )}
-                </Modal.Body>
-            </Modal>
+            {/* Trailer Modal */}
+            {showModal && (
+                <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} onClick={handleCloseTrailer}>
+                    <div className="modal-dialog modal-lg modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-content bg-dark text-white" style={{ border: '1px solid #6c757d' }}>
+                            <div className="modal-header border-secondary">
+                                <h5 className="modal-title d-flex align-items-center">
+                                    <span className="me-2 text-danger">🎬</span>
+                                    {movies.title} - Official Trailer
+                                </h5>
+                                <button type="button" className="btn-close btn-close-white" onClick={handleCloseTrailer}></button>
+                            </div>
+                            <div className="modal-body p-0 bg-black">
+                                {trailerUrl ? (
+                                    <div className="ratio ratio-16x9">
+                                        <iframe
+                                            src={trailerUrl.replace("watch?v=", "embed/")}
+                                            title="YouTube trailer"
+                                            allowFullScreen
+                                            className="border-0"
+                                        ></iframe>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-5">
+                                        <div className="fs-1 text-muted mb-3">📹</div>
+                                        <p className="text-muted fs-5">No trailer available</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    )
+    );
 }

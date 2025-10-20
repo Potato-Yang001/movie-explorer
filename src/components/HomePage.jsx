@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { getPopularMoviesTMDB } from "../services/movieAPI"
 import axios from "axios";
 import { AuthContext } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     const [movies, setMovies] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const { currentUser } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const API_BASE_URL = "https://e7d191c2-4c98-4d39-96df-4fc6e39d522f-00-3d6sd3diyggd0.pike.replit.dev"
 
@@ -147,7 +149,7 @@ export default function HomePage() {
                                                 </div>
                                                 <button
                                                     className="btn btn-primary position-relative overflow-hidden"
-                                                    onClick={() => alert(`View details of ${movie.title}`)}
+                                                    onClick={() => navigate(`/detail/${movie.id}`)}
                                                     style={{
                                                         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                                                         border: 'none',

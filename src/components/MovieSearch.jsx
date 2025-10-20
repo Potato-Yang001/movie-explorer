@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { searchMoviesTMDB } from "../services/movieAPI"; // import the searchMoviesTMDB function
+import { useNavigate } from "react-router-dom";
 
 export function MovieSearch() {
 
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
-
+    const navigate = useNavigate()
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -100,6 +101,7 @@ export function MovieSearch() {
                                     <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
                                     <button
                                         className="mt-3 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                                        onClick={() => navigate(`/detail/${movie.id}`)}
                                     >
                                         View Details
                                     </button>
