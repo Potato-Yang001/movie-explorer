@@ -92,22 +92,24 @@ export default function MovieSideBar() {
                         </Link>
                     </li>
 
-                    <li className="mb-3">
-                        <Link
-                            to="/favourite"
-                            className="d-flex align-items-center text-decoration-none text-dark p-2 rounded"
-                            onClick={closeSidebar}
-                            style={{ transition: "background 0.2s" }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#ccfbf1")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                        >
-                            <i
-                                className="bi bi-heart me-3 fs-5"
-                                style={{ color: "#0d9488" }}
-                            ></i>
-                            <span className="fw-semibold">Favourite</span>
-                        </Link>
-                    </li>
+                    {currentUser && (
+                        <li className="mb-3">
+                            <Link
+                                to="/favourite"
+                                className="d-flex align-items-center text-decoration-none text-dark p-2 rounded"
+                                onClick={closeSidebar}
+                                style={{ transition: "background 0.2s" }}
+                                onMouseEnter={(e) => (e.currentTarget.style.background = "#ccfbf1")}
+                                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            >
+                                <i
+                                    className="bi bi-heart me-3 fs-5"
+                                    style={{ color: "#0d9488" }}
+                                ></i>
+                                <span className="fw-semibold">Favourite</span>
+                            </Link>
+                        </li>
+                    )}
 
                     {!currentUser && (
                         <>
