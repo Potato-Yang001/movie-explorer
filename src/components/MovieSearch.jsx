@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { searchMoviesTMDB } from "../services/movieAPI"; // import the searchMoviesTMDB function
 import { useNavigate } from "react-router-dom";
+import MovieSideBar from "./MovieSideBar";
 
 export function MovieSearch() {
 
@@ -21,6 +22,8 @@ export function MovieSearch() {
 
     return (
         <div className="min-vh-100 bg-dark text-white">
+            {/* Sidebar component (moved to MovieSideBar) */}
+            <MovieSideBar />
             {/* Header Section */}
             <div className="py-5 shadow-lg" style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' }}>
                 <div className="container">

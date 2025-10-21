@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMovieDetailsOMDB, getMovieTrailerYouTube } from "../services/movieAPI"
 import axios from "axios";
 import { Modal } from "react-bootstrap";
+import MovieSideBar from "./MovieSideBar";
 
 export default function DetailPage() {
     const [movies, setMovies] = useState(null)
@@ -107,6 +108,8 @@ export default function DetailPage() {
 
     return (
         <div className="min-vh-100 bg-dark text-white position-relative overflow-hidden">
+            {/* Sidebar component (moved to MovieSideBar) */}
+            <MovieSideBar />
             {/* Backdrop Background */}
             <div
                 className="position-absolute top-0 start-0 w-100 h-100"

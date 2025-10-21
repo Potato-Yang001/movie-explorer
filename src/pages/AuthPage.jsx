@@ -13,7 +13,7 @@ export default function AuthPage() {
     const [login, setIsLogin] = useState(true);
     const [modalShow, setModalShow] = useState(null)
     const handleShowSignUp = () => setModalShow("SignUp")
-    const handleShowLogin = () => setModalShow("Login")
+    // const handleShowLogin = () => setModalShow("Login")
     const navigate = useNavigate()
     const location = useLocation()
 
