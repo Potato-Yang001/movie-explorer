@@ -5,6 +5,7 @@ import { MovieSearch } from "./components/MovieSearch";
 import MovieSideBar from "./components/MovieSideBar";
 import HomePage from "./components/HomePage";
 import DetailPage from "./components/DetailPage";
+import FavoritesPage from "./components/FavoritesPage";
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/detail/:id" element={<DetailPage />} />
               <Route path="/search" element={<MovieSearch />} />
+              <Route path="/favourite" element={<FavoritesPage />} />
               <Route path="/auth" element={<AuthPage />} />
             </Routes>
           </div>
