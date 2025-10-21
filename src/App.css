@@ -5,3 +5,7 @@ a {
 a:hover {
     text-decoration: none !important;
 }
+
+body.bg-body {
+    background: linear-gradient(135deg, #0f172a 0%, #164e63 100%) !important;
+}

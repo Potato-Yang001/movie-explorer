@@ -49,17 +49,54 @@ export default function HomePage() {
 
     if (loading) {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100" style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-            }}>
-                <div className="text-center px-3">
-                    <div className="spinner-border text-white mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
+            <div
+                className="d-flex justify-content-center align-items-center vh-100"
+                style={{
+                    background: "linear-gradient(135deg, #0f172a 0%, #164e63 100%)",
+                    position: "relative",
+                    overflow: "hidden",
+                }}
+            >
+                {/* Sci-fi ambient glow overlay */}
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background:
+                            "radial-gradient(circle at 30% 40%, rgba(20,184,166,0.15) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(94,234,212,0.15) 0%, transparent 60%)",
+                        pointerEvents: "none",
+                    }}
+                ></div>
+
+                <div className="text-center px-3 position-relative">
+                    <div
+                        className="spinner-border mb-3"
+                        role="status"
+                        style={{
+                            width: "3rem",
+                            height: "3rem",
+                            color: "#14b8a6",
+                            filter: "drop-shadow(0 0 12px rgba(20,184,166,0.6))",
+                        }}
+                    >
                         <span className="visually-hidden">Loading...</span>
                     </div>
-                    <p className="text-white fs-5 fw-semibold">Loading popular movies...</p>
+                    <p
+                        className="fs-5 fw-semibold"
+                        style={{
+                            color: "#e0f2fe",
+                            textShadow: "0 0 10px rgba(94,234,212,0.5)",
+                            letterSpacing: "0.03rem",
+                        }}
+                    >
+                        Loading popular movies...
+                    </p>
                 </div>
             </div>
-        )
+        );
     }
 
     let greeting
@@ -74,12 +111,14 @@ export default function HomePage() {
             <div
                 className="min-vh-100"
                 style={{
-                    background: "linear-gradient(135deg, #dc2626 0%, #991b1b 100%)",
+                    background: "linear-gradient(135deg, #0f172a 0%, #164e63 100%)",
                     color: "white",
                     marginLeft: "0",
+                    position: "relative",
+                    overflow: "hidden",
                 }}
             >
-                {/* Background overlay for texture */}
+                {/* Subtle animated overlay */}
                 <div
                     style={{
                         position: "absolute",
@@ -88,7 +127,7 @@ export default function HomePage() {
                         right: 0,
                         bottom: 0,
                         background:
-                            "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)",
+                            "radial-gradient(circle at 30% 40%, rgba(34,211,238,0.1) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(56,189,248,0.1) 0%, transparent 60%)",
                         pointerEvents: "none",
                     }}
                 ></div>
@@ -100,16 +139,18 @@ export default function HomePage() {
                             <h1
                                 className="display-4 display-md-3 fw-bold mb-2 mb-md-3"
                                 style={{
-                                    color: "white",
-                                    textShadow: "0 4px 20px rgba(0,0,0,0.4)",
+                                    color: "#5eead4",
+                                    textShadow: "0 4px 25px rgba(94,234,212,0.4)",
+                                    letterSpacing: "0.05rem",
                                 }}
                             >
                                 {greeting ? `Welcome ${greeting}` : "Welcome"} 🎬
                             </h1>
                             <h2
-                                className="h4 h3-md fw-semibold text-light"
+                                className="h4 h3-md fw-semibold"
                                 style={{
-                                    textShadow: "0 2px 10px rgba(0,0,0,0.3)",
+                                    color: "#e0f2fe",
+                                    textShadow: "0 2px 15px rgba(56,189,248,0.4)",
                                 }}
                             >
                                 to BingeBuddy
@@ -119,19 +160,23 @@ export default function HomePage() {
                             className="lead text-white-50 col-lg-8 mx-auto mb-0 px-2"
                             style={{
                                 fontSize: "clamp(0.9rem, 2vw, 1.125rem)",
-                                textShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                                textShadow: "0 2px 10px rgba(0,0,0,0.4)",
                             }}
                         >
-                            At Movie Explorer, we take the guesswork out of movie night—because choosing
-                            what to watch shouldn't feel like filing taxes.
+                            Explore worlds, one movie at a time — powered by next-gen movie discovery.
                         </p>
                     </div>
 
                     {/* Section Title */}
                     <div className="mb-3 mb-md-4 px-3 px-md-0">
-                        <div className="d-inline-flex align-items-center bg-white rounded-pill px-3 px-md-4 py-2 shadow-lg">
-                            <span className="fs-4 me-2">🔥</span>
-                            <h2 className="h5 h4-md fw-bold text-dark mb-0">
+                        <div
+                            className="d-inline-flex align-items-center rounded-pill px-3 px-md-4 py-2 shadow-lg"
+                            style={{
+                                background: "linear-gradient(135deg, #0891b2 0%, #0f172a 100%)",
+                            }}
+                        >
+                            <span className="fs-4 me-2">🚀</span>
+                            <h2 className="h5 h4-md fw-bold mb-0 text-white">
                                 Popular Movies
                             </h2>
                         </div>
@@ -145,10 +190,19 @@ export default function HomePage() {
                                     className="card border-0 shadow-lg h-100 overflow-hidden"
                                     style={{
                                         borderRadius: "1rem",
-                                        transition: "all 0.3s ease",
-                                        background: "rgba(0,0,0,0.7)",
+                                        background: "rgba(15,23,42,0.8)",
                                         color: "white",
-                                        backdropFilter: "blur(10px)",
+                                        backdropFilter: "blur(12px)",
+                                        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = "translateY(-4px)";
+                                        e.currentTarget.style.boxShadow =
+                                            "0 10px 30px rgba(20,184,166,0.4)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = "translateY(0)";
+                                        e.currentTarget.style.boxShadow = "none";
                                     }}
                                 >
                                     <div className="row g-0 h-100">
@@ -164,7 +218,7 @@ export default function HomePage() {
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="bg-secondary bg-opacity-10 h-100 d-flex align-items-center justify-content-center">
+                                                <div className="bg-dark bg-opacity-25 h-100 d-flex align-items-center justify-content-center">
                                                     <span className="text-muted small">No Image</span>
                                                 </div>
                                             )}
@@ -177,6 +231,7 @@ export default function HomePage() {
                                                         className="card-title fw-bold mb-0 me-2"
                                                         style={{
                                                             fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
+                                                            color: "#e0f2fe",
                                                         }}
                                                     >
                                                         {movie.title}
@@ -187,12 +242,15 @@ export default function HomePage() {
                                                         title="Add to Favorites"
                                                         style={{
                                                             fontSize: "clamp(1.25rem, 3vw, 1.5rem)",
+                                                            color: favorites.includes(movie.id)
+                                                                ? "#14b8a6"
+                                                                : "#e0f2fe",
                                                         }}
                                                     >
                                                         <i
                                                             className={`bi ${favorites.includes(movie.id)
-                                                                ? "bi-heart-fill text-danger"
-                                                                : "bi-heart text-light"
+                                                                ? "bi-heart-fill"
+                                                                : "bi-heart"
                                                                 }`}
                                                         ></i>
                                                     </button>
@@ -216,18 +274,18 @@ export default function HomePage() {
                                                         className="d-flex align-items-center justify-content-center px-2 py-1 rounded-pill shadow-sm flex-shrink-0"
                                                         style={{
                                                             background:
-                                                                "linear-gradient(135deg, #ffd89b 0%, #b91c1c 100%)",
+                                                                "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
                                                         }}
                                                     >
                                                         <span className="me-1">⭐</span>
-                                                        <span className="text-white fw-bold">
+                                                        <span className="fw-bold text-white">
                                                             {movie.vote_average?.toFixed(1)}
                                                         </span>
                                                     </div>
 
                                                     {currentUser && (
                                                         <button
-                                                            className="btn btn-danger flex-grow-1 flex-sm-grow-0"
+                                                            className="btn flex-grow-1 flex-sm-grow-0"
                                                             onClick={() =>
                                                                 navigate(`/detail/${movie.id}`)
                                                             }
@@ -238,18 +296,21 @@ export default function HomePage() {
                                                                 fontSize: "0.9rem",
                                                                 padding: "0.5rem 1.25rem",
                                                                 whiteSpace: "nowrap",
+                                                                color: "white",
+                                                                background:
+                                                                    "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
+                                                                borderRadius: "8px",
                                                             }}
                                                             onMouseEnter={(e) => {
                                                                 e.currentTarget.style.transform =
                                                                     "translateY(-2px)";
                                                                 e.currentTarget.style.boxShadow =
-                                                                    "0 8px 20px rgba(220, 38, 38, 0.4)";
+                                                                    "0 8px 20px rgba(20,184,166,0.5)";
                                                             }}
                                                             onMouseLeave={(e) => {
                                                                 e.currentTarget.style.transform =
                                                                     "translateY(0)";
-                                                                e.currentTarget.style.boxShadow =
-                                                                    "none";
+                                                                e.currentTarget.style.boxShadow = "none";
                                                             }}
                                                         >
                                                             <i className="bi bi-play-circle me-2"></i>
@@ -268,4 +329,5 @@ export default function HomePage() {
             </div>
         </div>
     );
+
 }

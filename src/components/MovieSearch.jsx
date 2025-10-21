@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { searchMoviesTMDB } from "../services/movieAPI"; // import the searchMoviesTMDB function
 import { useNavigate } from "react-router-dom";
 import MovieSideBar from "./MovieSideBar";
+import { AuthContext } from "./AuthProvider";
 
 export function MovieSearch() {
 
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
     const navigate = useNavigate()
+    const { currentUser } = useContext(AuthContext);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -22,17 +24,23 @@ export function MovieSearch() {
 
     return (
         <div className="min-vh-100 bg-dark text-white">
-            {/* Sidebar component (moved to MovieSideBar) */}
+            {/* Sidebar component */}
             <MovieSideBar />
+
             {/* Header Section */}
-            <div className="py-5 shadow-lg" style={{ background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' }}>
+            <div
+                className="py-5 shadow-lg"
+                style={{
+                    background: "linear-gradient(135deg, #0d9488 0%, #134e4a 100%)",
+                }}
+            >
                 <div className="container">
                     <div className="text-center mb-4">
                         <h1 className="display-4 fw-bold mb-2">
                             <span className="me-3">🎬</span>
                             Movie Search
                         </h1>
-                        <p className="lead" style={{ color: 'rgba(255,255,255,0.8)' }}>
+                        <p className="lead" style={{ color: "rgba(255,255,255,0.8)" }}>
                             Discover your favorite movies from our extensive database
                         </p>
                     </div>
@@ -66,16 +74,17 @@ export function MovieSearch() {
                                     onChange={(e) => setQuery(e.target.value)}
                                     className="form-control border-0 ps-2"
                                     placeholder="Search for movies, series, actors..."
-                                    style={{ fontSize: '1.1rem' }}
+                                    style={{ fontSize: "1.1rem" }}
                                     onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
+                                        if (e.key === "Enter") {
                                             handleSearch(e);
                                         }
                                     }}
                                 />
                                 <button
                                     type="button"
-                                    className="btn btn-danger px-5 fw-semibold"
+                                    className="btn px-5 fw-semibold text-white"
+                                    style={{ backgroundColor: "#0d9488", border: "none" }}
                                     onClick={handleSearch}
                                 >
                                     <span className="me-2">🔍</span>
@@ -104,7 +113,7 @@ export function MovieSearch() {
                             </svg>
                         </div>
                         <h3 className="text-white mb-3">No movies found yet</h3>
-                        <p className="fs-5" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                        <p className="fs-5" style={{ color: "rgba(255,255,255,0.6)" }}>
                             Start searching to discover amazing movies!
                         </p>
                     </div>
@@ -112,7 +121,8 @@ export function MovieSearch() {
                     <div>
                         <div className="d-flex justify-content-between align-items-center mb-4">
                             <h2 className="text-white fw-bold mb-0">
-                                <span className="text-danger">{results.length}</span> Results Found
+                                <span style={{ color: "#14b8a6" }}>{results.length}</span> Results
+                                Found
                             </h2>
                         </div>
 
@@ -121,15 +131,25 @@ export function MovieSearch() {
                                 <div key={movie.id} className="col-lg-3 col-md-4 col-sm-6">
                                     <div className="card bg-dark border-secondary shadow-lg h-100 overflow-hidden position-relative movie-card">
                                         {/* Movie Poster */}
-                                        <div className="position-relative overflow-hidden" style={{ height: '400px' }}>
+                                        <div
+                                            className="position-relative overflow-hidden"
+                                            style={{ height: "400px" }}
+                                        >
                                             {movie.poster_path ? (
                                                 <img
                                                     src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                                                     alt={movie.title}
                                                     className="card-img-top w-100 h-100"
-                                                    style={{ objectFit: 'cover', transition: 'transform 0.3s ease' }}
-                                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                    style={{
+                                                        objectFit: "cover",
+                                                        transition: "transform 0.3s ease",
+                                                    }}
+                                                    onMouseEnter={(e) =>
+                                                        (e.currentTarget.style.transform = "scale(1.05)")
+                                                    }
+                                                    onMouseLeave={(e) =>
+                                                        (e.currentTarget.style.transform = "scale(1)")
+                                                    }
                                                 />
                                             ) : (
                                                 <div className="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
@@ -151,18 +171,27 @@ export function MovieSearch() {
                                         </div>
 
                                         {/* Movie Title & Button */}
-                                        <div className="card-body bg-dark">
-                                            <h5 className="card-title text-white mb-3 text-truncate" title={movie.title}>
-                                                {movie.title}
-                                            </h5>
-                                            <button
-                                                className="btn btn-danger w-100"
-                                                onClick={() => navigate(`/detail/${movie.id}`)}
-                                            >
-                                                <span className="me-2">👁️</span>
-                                                View Details
-                                            </button>
-                                        </div>
+                                        {currentUser && (
+                                            <div className="card-body bg-dark">
+                                                <h5
+                                                    className="card-title text-white mb-3 text-truncate"
+                                                    title={movie.title}
+                                                >
+                                                    {movie.title}
+                                                </h5>
+                                                <button
+                                                    className="btn w-100 text-white"
+                                                    style={{
+                                                        backgroundColor: "#0d9488",
+                                                        border: "none",
+                                                    }}
+                                                    onClick={() => navigate(`/detail/${movie.id}`)}
+                                                >
+                                                    <span className="me-2">👁️</span>
+                                                    View Details
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -172,14 +201,15 @@ export function MovieSearch() {
             </div>
 
             <style>{`
-                .movie-card {
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                }
-                .movie-card:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3) !important;
-                }
-            `}</style>
+            .movie-card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .movie-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(13, 148, 136, 0.3) !important;
+            }
+        `}</style>
         </div>
     );
+
 }
