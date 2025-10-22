@@ -3,14 +3,21 @@ import { AuthContext } from "./AuthProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMovieDetailsOMDB, getMovieTrailerYouTube } from "../services/movieAPI"
 import axios from "axios";
-import { Modal } from "react-bootstrap";
+// import { Modal } from "react-bootstrap";
 import MovieSideBar from "./MovieSideBar";
+import { db, storage } from "../firebase"
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 export default function DetailPage() {
     const [movies, setMovies] = useState(null)
     const [loading, setLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [omdbDetails, setOmdbDetails] = useState(null)
+    const [reviews, setReviews] = useState([])
+    const [reviewText, setReviewText] = useState("")
+    const [reviewImage, setReviewImage] = useState(null)
     // const [movieDetail, setMovieDetail] = useState(null)
     const [trailerUrl, setTrailerUrl] = useState(null);
 
@@ -67,6 +74,53 @@ export default function DetailPage() {
 
     const handleShowTrailer = () => setShowModal(true)
     const handleCloseTrailer = () => setShowModal(false)
+
+    const handleUploadReview = async () => {
+        if (!reviewText) {
+            Swal.fire("Empty Review", "Please enter a review before submitting.", "info")
+            return
+        }
+
+        try {
+            let imageUrl = '';
+
+            if (reviewImage) {
+                const imageRef = ref(storage, `reviews/${id}_${Date.now()}_${reviewImage.name}`);
+                await uploadBytes(imageRef, reviewImage);
+                imageUrl = await getDownloadURL(imageRef);
+            }
+
+            await addDoc(collection(db, 'reviews'), {
+                movieId: id,
+                user: currentUser?.email || "Guest",
+                text: reviewText,
+                imageUrl,
+                createdAt: new Date(),
+            });
+            console.log("Review added successfully! ✅");
+            Swal.fire("Success!", "Your review has been posted.", "success")
+            setReviewText("");
+            setReviewImage(null);
+            fetchReviews()
+        } catch (err) {
+            Swal.fire("Error", err.message, "error")
+        }
+    }
+
+    const fetchReviews = async () => {
+        try {
+            const q = query(collection(db, "reviews"), where('movieId', "==", id));
+            const querySnapshot = await getDocs(q)
+            const reviewData = querySnapshot.docs.map((doc) => doc.data())
+            setReviews(reviewData)
+        } catch (err) {
+            console.error("Error fetching reviews:", err);
+        }
+    }
+
+    useEffect(() => {
+        fetchReviews()
+    }, [id])
 
     if (loading) {
         return (
@@ -271,6 +325,113 @@ export default function DetailPage() {
                     </div>
                 </div>
             )}
+
+            {/* Review Section */}
+            <div className="container mt-5" style={{ zIndex: 1 }}>
+                <div
+                    className="card text-white border-0 shadow-lg mb-5"
+                    style={{
+                        background: "linear-gradient(135deg, #0f172a 0%, #0d9488 100%)",
+                        borderRadius: "20px",
+                    }}
+                >
+                    <div className="card-body p-4">
+                        <h3 className="mb-4 fw-bold text-teal-300">
+                            💬 Leave a Review
+                        </h3>
+
+                        <textarea
+                            className="form-control bg-dark text-white mb-3 border-0 rounded-3 shadow-sm"
+                            rows="3"
+                            placeholder="Share your thoughts about this movie..."
+                            value={reviewText}
+                            onChange={(e) => setReviewText(e.target.value)}
+                        />
+
+                        <input
+                            id="reviewFile"
+                            type="file"
+                            accept="image/*"
+                            className="form-control bg-dark text-white mb-3 border-0 rounded-3 shadow-sm"
+                            onChange={(e) => setReviewImage(e.target.files[0])}
+                            value={""}
+                        />
+
+                        <button
+                            className="btn fw-semibold px-4 py-2"
+                            style={{
+                                backgroundColor: "#14b8a6",
+                                color: "white",
+                                borderRadius: "10px",
+                                transition: "all 0.3s ease",
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0d9488")}
+                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#14b8a6")}
+                            onClick={handleUploadReview}
+                        >
+                            🚀 Submit Review
+                        </button>
+                    </div>
+                </div>
+
+                {/* Display existing reviews */}
+                <div>
+                    <h4 className="text-light mb-4 fw-bold">User Reviews</h4>
+                    {reviews.length === 0 ? (
+                        <p className="text-muted">No reviews yet. Be the first to write one!</p>
+                    ) : (
+                        reviews.map((r, i) => (
+                            <div
+                                key={i}
+                                className="card mb-4 text-white border-0 shadow-lg"
+                                style={{
+                                    background: "linear-gradient(145deg, #0f172a 0%, #164e63 100%)",
+                                    borderRadius: "18px",
+                                }}
+                            >
+                                <div className="card-body p-4">
+                                    <div className="d-flex align-items-center mb-3">
+                                        <div
+                                            className="rounded-circle d-flex justify-content-center align-items-center me-3"
+                                            style={{
+                                                width: "45px",
+                                                height: "45px",
+                                                backgroundColor: "#14b8a6",
+                                                color: "#0f172a",
+                                                fontWeight: "bold",
+                                                fontSize: "18px",
+                                            }}
+                                        >
+                                            {r.user ? r.user.charAt(0).toUpperCase() : "?"}
+                                        </div>
+                                        <div>
+                                            <p className="fw-bold mb-0 text-white">{r.user}</p>
+                                            <small className="text-light opacity-75">
+                                                {new Date(r.createdAt?.seconds * 1000 || Date.now()).toLocaleString()}
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <p className="mt-2 fs-6 text-white-50">{r.text}</p>
+
+                                    {r.imageUrl && (
+                                        <img
+                                            src={r.imageUrl}
+                                            alt="Review"
+                                            className="img-fluid rounded mt-3 shadow-sm"
+                                            style={{
+                                                maxHeight: "300px",
+                                                borderRadius: "12px",
+                                                border: "2px solid rgba(20,184,166,0.4)",
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
