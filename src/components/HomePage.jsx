@@ -49,12 +49,7 @@ export default function HomePage() {
             navigate("/favourite")
         } catch (err) {
             console.error("Error adding favorite:", err);
-            Swal.fire({
-                icon: "error",
-                title: "Oops!",
-                text: "Failed to add to favorites. Please try again later.",
-                confirmButtonColor: "#d33",
-            });
+            alert("Failed to add to favorites!")
         }
     }
 

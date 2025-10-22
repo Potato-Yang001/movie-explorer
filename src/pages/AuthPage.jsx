@@ -1,175 +1,172 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { Modal } from "react-bootstrap";
+import {
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../firebase";
 
 export default function AuthPage() {
-
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [login, setIsLogin] = useState(true);
-    const [modalShow, setModalShow] = useState(null)
-    const handleShowSignUp = () => setModalShow("SignUp")
-    // const handleShowLogin = () => setModalShow("Login")
-    const navigate = useNavigate()
-    const location = useLocation()
+    const [isLogin, setIsLogin] = useState(true);
 
-    // const auth = getAuth();
-
-    const handleSignUp = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const res = await createUserWithEmailAndPassword(auth, username, password)
-            console.log(res.user)
-            navigate('/')
-        } catch (err) {
-            setError(err.message)
-        }
-    }
-
-    const handleLogin = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            await signInWithEmailAndPassword(auth, username, password)
-            navigate('/')
-        } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
-    }
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        if (location.search.includes("signup")) {
-            setModalShow("SignUp");
-        } else {
-            setModalShow("Login");
-        }
+        if (location.search.includes("signup")) setIsLogin(false);
+        else setIsLogin(true);
     }, [location]);
 
-    const provider = new GoogleAuthProvider()
+    const provider = new GoogleAuthProvider();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        try {
+            if (isLogin) {
+                await signInWithEmailAndPassword(auth, email, password);
+            } else {
+                await createUserWithEmailAndPassword(auth, email, password);
+            }
+            navigate("/");
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleGoogleSignIn = async () => {
+        setLoading(true);
         try {
-            await signInWithPopup(auth, provider)
+            await signInWithPopup(auth, provider);
+            navigate("/");
         } catch (err) {
-            console.error(err)
+            setError(err.message);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
-
-    const handleClose = () => setModalShow(null)
+    };
 
     return (
-        <>
-            {/* <button
-                className="bg-blue-600 text-white px-5 py-2 rounded-lg"
-                onClick={handleShowLogin}
-            >
-                Login
-            </button>  */}
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#01497C] via-[#0A9396] to-[#001F3F] animate-gradient-x">
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-md p-8">
+                <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+                    {isLogin ? "Welcome Back 🌊" : "Join Us 🌅"}
+                </h2>
+                <p className="text-center text-gray-500 mb-6">
+                    {isLogin ? "Login to your account" : "Create your account"}
+                </p>
 
-            <Modal show={modalShow === "Login"} onHide={handleClose} centered>
-                <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Sign In</h3>
+                {error && <p className="text-red-500 text-center mb-3">{error}</p>}
 
-                    {error && <p className="text-red-500 mb-2">{error}</p>}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none 
+                         focus:ring-2 focus:ring-teal-500 transition-all duration-200"
+                            placeholder="you@example.com"
+                            required
+                        />
+                    </div>
 
-                    <form onSubmit={handleLogin}>
-                        <div className="mb-4">
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                            <input type="email" id="email" className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                                value={username} onChange={(e) => setUsername(e.target.value)}
-                                placeholder="name@flowbite.com"
-                                required />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                            <input type="password" id="password" className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                                value={password} onChange={(e) => setPassword(e.target.value)}
-                                required />
-                        </div>
-                        <div className="flex items-start mb-5">
-                            <div className="flex items-center h-5">
-                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
-                            </div>
-                            <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                        </div>
-                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >{loading ? "Login..." : "Login"}</button>
-                        <p className="text-center mt-3 text-sm">
-                            {login ? (
-                                <>
-                                    Don't have an account?{" "}
-                                    <span
-                                        className="text-blue-600 cursor-pointer"
-                                        onClick={handleShowSignUp}
-                                    >
-                                        Create account
-                                    </span>
-                                </>
-                            ) : (
-                                <>
-                                    Already have an account?{" "}
-                                    <span
-                                        className="text-blue-600 cursor-pointer"
-                                        onClick={() => {
-                                            setModalShow("Login");
-                                            setIsLogin(true);
-                                        }}
-                                    >
-                                        Back to Login
-                                    </span>
-                                </>
-                            )}
-                        </p>
-                    </form>
+                    <div>
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none 
+                         focus:ring-2 focus:ring-teal-500 transition-all duration-200"
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-[#0A9396] hover:bg-[#0B7E8C] text-white py-2.5 rounded-lg font-medium 
+                       transition-all duration-200 shadow-md hover:shadow-lg"
+                    >
+                        {loading
+                            ? isLogin
+                                ? "Signing In..."
+                                : "Creating Account..."
+                            : isLogin
+                                ? "Sign In"
+                                : "Sign Up"}
+                    </button>
+                </form>
+
+                <div className="flex items-center justify-center my-5">
+                    <div className="h-px bg-gray-300 w-1/3"></div>
+                    <span className="mx-3 text-gray-500 text-sm">or</span>
+                    <div className="h-px bg-gray-300 w-1/3"></div>
                 </div>
-            </Modal>
 
-            <Modal show={modalShow === "SignUp"} onHide={handleClose} centered>
-                <div className="p-6">
-                    <h3 className="text-xl font-bold mb-4">Sign Up</h3>
+                <button
+                    onClick={handleGoogleSignIn}
+                    type="button"
+                    className="w-full bg-white border border-gray-300 text-gray-700 py-2.5 rounded-lg 
+                     font-medium flex items-center justify-center hover:bg-gray-50 
+                     transition-all duration-200 shadow-sm hover:shadow-md"
+                >
+                    <img
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        alt="Google logo"
+                        className="w-5 h-5 mr-2"
+                    />
+                    Continue with Google
+                </button>
 
-                    {error && <p className="text-red-500 mb-2">{error}</p>}
-
-                    <form onSubmit={handleSignUp}>
-                        <div className="mb-4">
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                            <input type="email" id="email" className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                                value={username} onChange={(e) => setUsername(e.target.value)}
-                                placeholder="name@flowbite.com"
-                                required />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                            <input type="password" id="password" className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                                value={password} onChange={(e) => setPassword(e.target.value)}
-                                required />
-                        </div>
-                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >{loading ? "Registering..." : "Register new account"}</button>
-
-                        <div class="inline-flex items-center justify-center w-full">
-                            <hr class="w-80 h-[2px] my-8 bg-gray-600 border-0 dark:bg-gray-700" />
-                            <span class="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2 dark:text-white dark:bg-gray-900">or</span>
-                        </div>
-                        <br />
-                        <button onClick={handleGoogleSignIn} type="button" className="text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 me-2 mb-2">
-                            <svg className="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 19">
-                                <path fillRule="evenodd" d="M8.842 18.083a8.8 8.8 0 0 1-8.65-8.948 8.841 8.841 0 0 1 8.8-8.652h.153a8.464 8.464 0 0 1 5.7 2.257l-2.193 2.038A5.27 5.27 0 0 0 9.09 3.4a5.882 5.882 0 0 0-.2 11.76h.124a5.091 5.091 0 0 0 5.248-4.057L14.3 11H9V8h8.34c.066.543.095 1.09.088 1.636-.086 5.053-3.463 8.449-8.4 8.449l-.186-.002Z" clipRule="evenodd" />
-                            </svg>
-                            Sign in with Google
-                        </button>
-                    </form>
-                </div>
-            </Modal>
-        </>
-    )
+                <p className="text-center text-sm text-gray-600 mt-6">
+                    {isLogin ? (
+                        <>
+                            Don’t have an account?{" "}
+                            <span
+                                onClick={() => setIsLogin(false)}
+                                className="text-[#0A9396] font-medium hover:underline cursor-pointer"
+                            >
+                                Sign up
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            Already have an account?{" "}
+                            <span
+                                onClick={() => setIsLogin(true)}
+                                className="text-[#0A9396] font-medium hover:underline cursor-pointer"
+                            >
+                                Sign in
+                            </span>
+                        </>
+                    )}
+                </p>
+            </div>
+        </div>
+    );
 }
