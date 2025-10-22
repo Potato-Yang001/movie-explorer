@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef, useCallback } from "react";
 import { AuthContext } from "./AuthProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import { getMovieDetailsOMDB, getMovieTrailerYouTube } from "../services/movieAPI"
@@ -18,6 +18,7 @@ export default function DetailPage() {
     const [reviews, setReviews] = useState([])
     const [reviewText, setReviewText] = useState("")
     const [reviewImage, setReviewImage] = useState(null)
+    const reviewFileRef = useRef(null)
     // const [movieDetail, setMovieDetail] = useState(null)
     const [trailerUrl, setTrailerUrl] = useState(null);
 
@@ -76,7 +77,8 @@ export default function DetailPage() {
     const handleCloseTrailer = () => setShowModal(false)
 
     const handleUploadReview = async () => {
-        if (!reviewText) {
+        console.log('Submitting review, reviewText:', JSON.stringify(reviewText))
+        if (!reviewText || !reviewText.trim()) {
             Swal.fire("Empty Review", "Please enter a review before submitting.", "info")
             return
         }
@@ -90,24 +92,28 @@ export default function DetailPage() {
                 imageUrl = await getDownloadURL(imageRef);
             }
 
-            await addDoc(collection(db, 'reviews'), {
-                movieId: id,
-                user: currentUser?.email || "Guest",
-                text: reviewText,
-                imageUrl,
-                createdAt: new Date(),
-            });
+            await addDoc(
+                collection(db, "users", currentUser.uid, "reviews"), // 👈 nested under user
+                {
+                    movieId: id,
+                    text: reviewText,
+                    imageUrl,
+                    createdAt: new Date(),
+                }
+            );
             console.log("Review added successfully! ✅");
             Swal.fire("Success!", "Your review has been posted.", "success")
             setReviewText("");
             setReviewImage(null);
+            // clear native file input so it appears empty to the user
+            if (reviewFileRef.current) reviewFileRef.current.value = '';
             fetchReviews()
         } catch (err) {
             Swal.fire("Error", err.message, "error")
         }
     }
 
-    const fetchReviews = async () => {
+    const fetchReviews = useCallback(async () => {
         try {
             const q = query(collection(db, "reviews"), where('movieId', "==", id));
             const querySnapshot = await getDocs(q)
@@ -116,11 +122,11 @@ export default function DetailPage() {
         } catch (err) {
             console.error("Error fetching reviews:", err);
         }
-    }
+    }, [id])
 
     useEffect(() => {
         fetchReviews()
-    }, [id])
+    }, [fetchReviews])
 
     if (loading) {
         return (
@@ -350,14 +356,15 @@ export default function DetailPage() {
 
                         <input
                             id="reviewFile"
+                            ref={reviewFileRef}
                             type="file"
                             accept="image/*"
                             className="form-control bg-dark text-white mb-3 border-0 rounded-3 shadow-sm"
                             onChange={(e) => setReviewImage(e.target.files[0])}
-                            value={""}
                         />
 
                         <button
+                            type="button"
                             className="btn fw-semibold px-4 py-2"
                             style={{
                                 backgroundColor: "#14b8a6",

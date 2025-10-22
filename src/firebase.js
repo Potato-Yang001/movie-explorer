@@ -11,7 +11,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyC1IcVmtNl1qs3T3oHIJfxG9DNVM6K370k",
     authDomain: "movie-tracker-875e5.firebaseapp.com",
     projectId: "movie-tracker-875e5",
-    storageBucket: "movie-tracker-875e5.firebasestorage.app",
+    storageBucket: "movie-tracker-875e5.appspot.com",
     messagingSenderId: "273552178067",
     appId: "1:273552178067:web:2345d88cbd852c1d8cc666"
 };
