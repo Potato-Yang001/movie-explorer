@@ -31,14 +31,15 @@ export default function HomePage() {
         try {
             const newFavorite = {
                 username: currentUser?.displayName || currentUser?.email || "Guest",
-                movieId: movie.id,
+                movie_id: movie.id, // ✅ match Neon column
                 title: movie.title,
-                posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+                poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`, // ✅ match Neon column
                 watch_time: new Date().toISOString()
             };
             const res = await axios.post(`${API_BASE_URL}/favorites`, newFavorite);
             setFavorites([...favorites, res.data]);
             alert(`${movie.title} added to favorites!`)
+            navigate("/favourite")
         } catch (err) {
             console.error("Error adding favorite:", err);
             alert("Failed to add to favorites!")

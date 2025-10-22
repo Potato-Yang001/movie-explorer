@@ -50,15 +50,15 @@ export default function DetailPage() {
     const handleAddFavorite = async (movie) => {
         const newFavorite = {
             username: currentUser?.displayName || currentUser?.email || "Guest",
-            movieId: movie.id,
+            movie_id: movie.id,                  // ✅ match DB column
             title: movie.title,
-            posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-            watch_time: new Date().toISOString()
+            poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,  // ✅ match DB column
+            watch_time: new Date().toISOString(),
         };
         try {
             await axios.post(`${API_BASE_URL}/favorites`, newFavorite);
             alert(`${movie.title} added to favorites!`)
-            navigate("/favorites")
+            navigate("/favourite")
         } catch (err) {
             console.error("Error adding favorite:", err);
             alert("Failed to add to favorites!")
@@ -228,7 +228,7 @@ export default function DetailPage() {
                             )}
                             <button
                                 className="btn btn-outline-light btn-lg px-4 py-3 d-flex align-items-center shadow-lg"
-                                onClick={handleAddFavorite}
+                                onClick={() => handleAddFavorite(movies)}
                             >
                                 <span className="fs-4 me-2">❤️</span>
                                 <span className="fw-semibold">Add to Favorites</span>

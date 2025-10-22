@@ -182,8 +182,16 @@ export function MovieSearch() {
                                                 <button
                                                     className="btn w-100 text-white"
                                                     style={{
-                                                        backgroundColor: "#0d9488",
                                                         border: "none",
+                                                        transition: "all 0.3s ease",
+                                                        fontWeight: "600",
+                                                        fontSize: "0.9rem",
+                                                        padding: "0.5rem 1.25rem",
+                                                        whiteSpace: "nowrap",
+                                                        color: "white",
+                                                        background:
+                                                            "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
+                                                        borderRadius: "8px",
                                                     }}
                                                     onClick={() => navigate(`/detail/${movie.id}`)}
                                                 >

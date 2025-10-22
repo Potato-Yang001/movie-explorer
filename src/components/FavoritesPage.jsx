@@ -119,9 +119,9 @@ export default function FavoritesPage() {
                                 <div className="row g-0 h-100">
                                     {/* Left: Poster */}
                                     <div className="col-4 col-sm-3 col-md-3 col-lg-2">
-                                        {movie.poster_path ? (
+                                        {movie.poster_url ? (
                                             <img
-                                                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                                src={movie.poster_url}
                                                 alt={movie.title}
                                                 className="img-fluid w-100 h-100"
                                                 style={{ objectFit: "cover", minHeight: "200px" }}
@@ -154,7 +154,7 @@ export default function FavoritesPage() {
                                                     <i className="bi bi-trash3-fill fs-5"></i>
                                                 </button>
                                             </div>
-
+                                            {/*
                                             <p className="text-gray-300 small mb-2">
                                                 {movie.release_date
                                                     ? `Released: ${movie.release_date}`
@@ -166,10 +166,22 @@ export default function FavoritesPage() {
                                                     ? movie.overview.slice(0, 150) + "..."
                                                     : "No description available."}
                                             </p>
-
+                                            */}
                                             <Link
-                                                to={`/detail/${movie.id}`}
+                                                to={`/detail/${movie.movie_id}`}
                                                 className="btn btn-outline-info mt-auto w-fit"
+                                                style={{
+                                                    border: "none",
+                                                    transition: "all 0.3s ease",
+                                                    fontWeight: "600",
+                                                    fontSize: "0.9rem",
+                                                    padding: "0.5rem 1.25rem",
+                                                    whiteSpace: "nowrap",
+                                                    color: "white",
+                                                    background:
+                                                        "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
+                                                    borderRadius: "8px",
+                                                }}
                                             >
                                                 View Details
                                             </Link>
