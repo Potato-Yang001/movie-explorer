@@ -65,26 +65,34 @@ export default function DetailPage() {
         };
         try {
             await axios.post(`${API_BASE_URL}/favorites`, newFavorite);
-            alert(`${movie.title} added to favorites!`)
+            Swal.fire({
+                icon: "success",
+                title: "Added to Favorites!",
+                text: `${movie.title} has been successfully added.`,
+                confirmButtonColor: "#3085d6",
+            });
             navigate("/favourite")
         } catch (err) {
             console.error("Error adding favorite:", err);
-            alert("Failed to add to favorites!")
+            Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: "Failed to add to favorites. Please try again later.",
+                confirmButtonColor: "#d33",
+            });
         }
     }
 
     const handleShowTrailer = () => setShowModal(true)
     const handleCloseTrailer = () => setShowModal(false)
-
     const handleUploadReview = async () => {
-        console.log('Submitting review, reviewText:', JSON.stringify(reviewText))
         if (!reviewText || !reviewText.trim()) {
-            Swal.fire("Empty Review", "Please enter a review before submitting.", "info")
-            return
+            Swal.fire("Empty Review", "Please enter a review before submitting.", "info");
+            return;
         }
 
         try {
-            let imageUrl = '';
+            let imageUrl = "";
 
             if (reviewImage) {
                 const imageRef = ref(storage, `reviews/${id}_${Date.now()}_${reviewImage.name}`);
@@ -92,37 +100,36 @@ export default function DetailPage() {
                 imageUrl = await getDownloadURL(imageRef);
             }
 
-            await addDoc(
-                collection(db, "users", currentUser.uid, "reviews"), // 👈 nested under user
-                {
-                    movieId: id,
-                    text: reviewText,
-                    imageUrl,
-                    createdAt: new Date(),
-                }
-            );
-            console.log("Review added successfully! ✅");
-            Swal.fire("Success!", "Your review has been posted.", "success")
+            await addDoc(collection(db, "reviews"), {
+                user: currentUser?.displayName || currentUser?.email || "Anonymous",
+                userId: currentUser?.uid,
+                movieId: id,
+                text: reviewText,
+                imageUrl,
+                createdAt: new Date(),
+            });
+
+            Swal.fire("Success!", "Your review has been posted.", "success");
             setReviewText("");
             setReviewImage(null);
-            // clear native file input so it appears empty to the user
-            if (reviewFileRef.current) reviewFileRef.current.value = '';
-            fetchReviews()
+            if (reviewFileRef.current) reviewFileRef.current.value = "";
+            fetchReviews();
         } catch (err) {
-            Swal.fire("Error", err.message, "error")
+            Swal.fire("Error", err.message, "error");
         }
-    }
+    };
+
 
     const fetchReviews = useCallback(async () => {
         try {
-            const q = query(collection(db, "reviews"), where('movieId', "==", id));
-            const querySnapshot = await getDocs(q)
-            const reviewData = querySnapshot.docs.map((doc) => doc.data())
-            setReviews(reviewData)
+            const q = query(collection(db, "reviews"), where("movieId", "==", id));
+            const querySnapshot = await getDocs(q);
+            const reviewData = querySnapshot.docs.map((doc) => doc.data());
+            setReviews(reviewData);
         } catch (err) {
             console.error("Error fetching reviews:", err);
         }
-    }, [id])
+    }, [id]);
 
     useEffect(() => {
         fetchReviews()

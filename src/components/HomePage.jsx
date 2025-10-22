@@ -4,6 +4,8 @@ import axios from "axios";
 import { AuthContext } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 import MovieSideBar from "./MovieSideBar";
+import Swal from "sweetalert2";
+
 
 export default function HomePage() {
     const [movies, setMovies] = useState([]);
@@ -38,11 +40,21 @@ export default function HomePage() {
             };
             const res = await axios.post(`${API_BASE_URL}/favorites`, newFavorite);
             setFavorites([...favorites, res.data]);
-            alert(`${movie.title} added to favorites!`)
+            Swal.fire({
+                icon: "success",
+                title: "Added to Favorites!",
+                text: `${movie.title} has been successfully added.`,
+                confirmButtonColor: "#3085d6",
+            });
             navigate("/favourite")
         } catch (err) {
             console.error("Error adding favorite:", err);
-            alert("Failed to add to favorites!")
+            Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: "Failed to add to favorites. Please try again later.",
+                confirmButtonColor: "#d33",
+            });
         }
     }
 
