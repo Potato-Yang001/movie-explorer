@@ -33,6 +33,7 @@ export default function MovieSideBar() {
     const handleLogout = async () => {
         // If AuthProvider exposes a logout function, call it. Otherwise just navigate.
         signOut(auth)
+        navigate('/')
     };
 
     return (
