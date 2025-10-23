@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function FavoritesPage() {
     const API_BASE_URL =
-        "https://e7d191c2-4c98-4d39-96df-4fc6e39d522f-00-3d6sd3diyggd0.pike.replit.dev";
+        "https://movieexplorerbackendapi.vercel.app";
 
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);

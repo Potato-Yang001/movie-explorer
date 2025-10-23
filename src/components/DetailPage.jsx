@@ -26,7 +26,7 @@ export default function DetailPage() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const API_BASE_URL = "https://e7d191c2-4c98-4d39-96df-4fc6e39d522f-00-3d6sd3diyggd0.pike.replit.dev"
+    const API_BASE_URL = "https://movieexplorerbackendapi.vercel.app"
 
     useEffect(() => {
         const fetchDetailMovie = async () => {
