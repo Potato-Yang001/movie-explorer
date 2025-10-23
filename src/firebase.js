@@ -10,8 +10,9 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyC1IcVmtNl1qs3T3oHIJfxG9DNVM6K370k",
     authDomain: "movie-tracker-875e5.firebaseapp.com",
+    databaseURL: "https://movie-tracker-875e5-default-rtdb.firebaseio.com",
     projectId: "movie-tracker-875e5",
-    storageBucket: "movie-tracker-875e5.appspot.com",
+    storageBucket: "movie-tracker-875e5.firebasestorage.app",
     messagingSenderId: "273552178067",
     appId: "1:273552178067:web:2345d88cbd852c1d8cc666"
 };

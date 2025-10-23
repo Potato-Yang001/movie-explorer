@@ -99,7 +99,7 @@ export default function DetailPage() {
                 await uploadBytes(imageRef, reviewImage);
                 imageUrl = await getDownloadURL(imageRef);
             }
-
+            console.log(imageUrl)
             await addDoc(collection(db, "reviews"), {
                 user: currentUser?.displayName || currentUser?.email || "Anonymous",
                 userId: currentUser?.uid,
@@ -126,6 +126,7 @@ export default function DetailPage() {
             const querySnapshot = await getDocs(q);
             const reviewData = querySnapshot.docs.map((doc) => doc.data());
             setReviews(reviewData);
+            console.log(querySnapshot)
         } catch (err) {
             console.error("Error fetching reviews:", err);
         }
