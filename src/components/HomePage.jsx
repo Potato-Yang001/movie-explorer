@@ -244,26 +244,27 @@ export default function HomePage() {
                                                     >
                                                         {movie.title}
                                                     </h3>
-                                                    <button
-                                                        className="btn btn-link p-0 flex-shrink-0"
-                                                        onClick={() => handleAddFavorite(movie)}
-                                                        title="Add to Favorites"
-                                                        style={{
-                                                            fontSize: "clamp(1.25rem, 3vw, 1.5rem)",
-                                                            color: favorites.includes(movie.id)
-                                                                ? "#14b8a6"
-                                                                : "#e0f2fe",
-                                                        }}
-                                                    >
-                                                        <i
-                                                            className={`bi ${favorites.includes(movie.id)
-                                                                ? "bi-heart-fill"
-                                                                : "bi-heart"
-                                                                }`}
-                                                        ></i>
-                                                    </button>
+                                                    {currentUser && (
+                                                        <button
+                                                            className="btn btn-link p-0 flex-shrink-0"
+                                                            onClick={() => handleAddFavorite(movie)}
+                                                            title="Add to Favorites"
+                                                            style={{
+                                                                fontSize: "clamp(1.25rem, 3vw, 1.5rem)",
+                                                                color: favorites.includes(movie.id)
+                                                                    ? "#14b8a6"
+                                                                    : "#e0f2fe",
+                                                            }}
+                                                        >
+                                                            <i
+                                                                className={`bi ${favorites.includes(movie.id)
+                                                                    ? "bi-heart-fill"
+                                                                    : "bi-heart"
+                                                                    }`}
+                                                            ></i>
+                                                        </button>
+                                                    )}
                                                 </div>
-
                                                 <p
                                                     className="text-white-50 mb-2 mb-md-3 flex-grow-1"
                                                     style={{
