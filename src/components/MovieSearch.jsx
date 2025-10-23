@@ -137,7 +137,7 @@ export function MovieSearch() {
 
                             <div className="row g-3 g-md-4 px-2 px-md-0">
                                 {results.map((movie) => (
-                                    <div key={movie.id} className="col-12">
+                                    <div key={movie.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
                                         <div
                                             className="card border-0 shadow-lg h-100 overflow-hidden"
                                             style={{
@@ -146,9 +146,10 @@ export function MovieSearch() {
                                                 color: "white",
                                                 backdropFilter: "blur(12px)",
                                                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                                cursor: "pointer",
                                             }}
                                             onMouseEnter={(e) => {
-                                                e.currentTarget.style.transform = "translateY(-4px)";
+                                                e.currentTarget.style.transform = "translateY(-8px)";
                                                 e.currentTarget.style.boxShadow =
                                                     "0 10px 30px rgba(20,184,166,0.4)";
                                             }}
@@ -156,89 +157,108 @@ export function MovieSearch() {
                                                 e.currentTarget.style.transform = "translateY(0)";
                                                 e.currentTarget.style.boxShadow = "none";
                                             }}
+                                            onClick={() => currentUser && navigate(`/detail/${movie.id}`)}
                                         >
-                                            <div className="row g-0 h-100 align-items-center">
-                                                <div className="col-4 col-sm-3 col-md-2">
-                                                    {movie.poster_path ? (
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                                            alt={movie.title}
-                                                            className="img-fluid w-100 h-100"
-                                                            style={{
-                                                                objectFit: "cover",
-                                                                minHeight: "180px",
-                                                                borderRadius: "1rem 0 0 1rem",
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <div className="bg-dark bg-opacity-25 h-100 d-flex align-items-center justify-content-center">
-                                                            <span className="text-muted small">No Image</span>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="col-8 col-sm-9 col-md-10">
-                                                    <div className="card-body d-flex flex-column h-100 p-3 p-md-4">
-                                                        <h3
-                                                            className="card-title fw-bold mb-2"
-                                                            style={{
-                                                                fontSize: "clamp(1rem, 2.5vw, 1.4rem)",
-                                                                color: "#e0f2fe",
-                                                            }}
-                                                        >
-                                                            {movie.title}
-                                                        </h3>
-
-                                                        <p
-                                                            className="text-white-50 mb-3 flex-grow-1"
-                                                            style={{
-                                                                display: "-webkit-box",
-                                                                WebkitLineClamp:
-                                                                    window.innerWidth < 576 ? 3 : 2,
-                                                                WebkitBoxOrient: "vertical",
-                                                                overflow: "hidden",
-                                                                fontSize: "clamp(0.85rem, 2vw, 1rem)",
-                                                            }}
-                                                        >
-                                                            {movie.overview || "No description available."}
-                                                        </p>
-
-                                                        {currentUser && (
-                                                            <div className="mt-auto d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
-
-                                                                <button
-                                                                    className="btn flex-grow-1 flex-sm-grow-0"
-                                                                    onClick={() => navigate(`/detail/${movie.id}`)}
-                                                                    style={{
-                                                                        border: "none",
-                                                                        transition: "all 0.3s ease",
-                                                                        fontWeight: "600",
-                                                                        fontSize: "0.9rem",
-                                                                        padding: "0.5rem 1.25rem",
-                                                                        color: "white",
-                                                                        background:
-                                                                            "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
-                                                                        borderRadius: "8px",
-                                                                    }}
-                                                                    onMouseEnter={(e) => {
-                                                                        e.currentTarget.style.transform =
-                                                                            "translateY(-2px)";
-                                                                        e.currentTarget.style.boxShadow =
-                                                                            "0 8px 20px rgba(20,184,166,0.5)";
-                                                                    }}
-                                                                    onMouseLeave={(e) => {
-                                                                        e.currentTarget.style.transform =
-                                                                            "translateY(0)";
-                                                                        e.currentTarget.style.boxShadow = "none";
-                                                                    }}
-                                                                >
-                                                                    <i className="bi bi-play-circle me-2"></i>
-                                                                    View Details
-                                                                </button>
-                                                            </div>
-                                                        )}
+                                            {/* Movie Poster */}
+                                            <div style={{ position: "relative" }}>
+                                                {movie.poster_path ? (
+                                                    <img
+                                                        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                                        alt={movie.title}
+                                                        className="img-fluid w-100"
+                                                        style={{
+                                                            aspectRatio: "2/3",
+                                                            objectFit: "cover",
+                                                            borderRadius: "1rem 1rem 0 0",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div
+                                                        className="d-flex flex-column align-items-center justify-content-center"
+                                                        style={{
+                                                            aspectRatio: "2/3",
+                                                            borderRadius: "1rem 1rem 0 0",
+                                                            background: "linear-gradient(135deg, rgba(15,23,42,0.9), rgba(22,78,99,0.9))",
+                                                        }}
+                                                    >
+                                                        <i className="bi bi-film" style={{ fontSize: "3rem", color: "rgba(94,234,212,0.3)", marginBottom: "0.5rem" }}></i>
+                                                        <span className="text-muted small">No Image</span>
                                                     </div>
-                                                </div>
+                                                )}
+
+                                                {/* Gradient overlay */}
+                                                <div
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        right: 0,
+                                                        height: "50%",
+                                                        background: "linear-gradient(to top, rgba(15,23,42,0.95), transparent)",
+                                                        pointerEvents: "none",
+                                                    }}
+                                                ></div>
+                                            </div>
+
+                                            {/* Movie Info */}
+                                            <div className="card-body p-3">
+                                                <h5
+                                                    className="card-title fw-bold mb-2"
+                                                    style={{
+                                                        fontSize: "clamp(0.85rem, 2vw, 1rem)",
+                                                        color: "#e0f2fe",
+                                                        display: "-webkit-box",
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: "vertical",
+                                                        overflow: "hidden",
+                                                        minHeight: "2.4em",
+                                                        lineHeight: "1.2em",
+                                                    }}
+                                                >
+                                                    {movie.title}
+                                                </h5>
+
+                                                {movie.release_date && (
+                                                    <p
+                                                        className="text-white-50 mb-3"
+                                                        style={{
+                                                            fontSize: "0.8rem",
+                                                        }}
+                                                    >
+                                                        {new Date(movie.release_date).getFullYear()}
+                                                    </p>
+                                                )}
+
+                                                {currentUser && (
+                                                    <button
+                                                        className="btn btn-sm w-100"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigate(`/detail/${movie.id}`);
+                                                        }}
+                                                        style={{
+                                                            border: "none",
+                                                            transition: "all 0.3s ease",
+                                                            fontWeight: "600",
+                                                            fontSize: "0.8rem",
+                                                            padding: "0.5rem",
+                                                            color: "white",
+                                                            background:
+                                                                "linear-gradient(135deg, #14b8a6 0%, #0f172a 100%)",
+                                                            borderRadius: "8px",
+                                                        }}
+                                                        onMouseEnter={(e) => {
+                                                            e.currentTarget.style.boxShadow =
+                                                                "0 4px 12px rgba(20,184,166,0.5)";
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.currentTarget.style.boxShadow = "none";
+                                                        }}
+                                                    >
+                                                        <i className="bi bi-play-circle me-1"></i>
+                                                        Details
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
