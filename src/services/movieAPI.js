@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const OMDB_BASE_URL = 'http://www.omdbapi.com/';
+const OMDB_BASE_URL = 'https://www.omdbapi.com/';
 const YOUTUBE_BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;  // means to access environment variable for TMDB API key
